@@ -2165,7 +2165,8 @@ You can also:
         const model = (modelEl && modelEl.value) ? modelEl.value : (provider === 'openai' ? 'gpt-4o-mini' : provider === 'anthropic' ? 'claude-3.5-sonnet' : 'gemini-1.5-pro');
 
         try {
-          const res = await fetch('/api/generate', {
+          const apiBase = (typeof window !== 'undefined' && window.API_BASE) ? window.API_BASE.replace(/\/$/, '') : '';
+          const res = await fetch(`${apiBase}/api/generate`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
