@@ -5,6 +5,9 @@ import { normalize } from './utils/normalize.js';
 import { estimateAndPrice } from './utils/pricing.js';
 
 export default async function handler(req, res) {
+  // Minimal CORS support (allow calling from other origins)
+  setCORS(res);
+  if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
@@ -22,7 +25,7 @@ export default async function handler(req, res) {
     if (provider === 'openai') raw = await callOpenAI({ model, prompt, settings });
     else if (provider === 'anthropic') raw = await callAnthropic({ model, prompt, settings });
     else if (provider === 'gemini') raw = await callGemini({ model, prompt, settings });
-    else return res.status(400).json({ error: 'Unsupported provider' });
+  else return res.status(400).json({ error: 'Unsupported provider' });
 
     const result = normalize(raw, provider);
     // Best-effort usage mapping (some providers vary):
@@ -48,4 +51,10 @@ function checkAllowed(provider, model, plan) {
     return { allowed: false, reason: `Upgrade required for model ${model}` };
   }
   return { allowed: true };
+}
+
+function setCORS(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Plan');
 }
