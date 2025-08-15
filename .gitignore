@@ -1,0 +1,4 @@
+# Node/OS junk (not strictly needed for a static site)
+node_modules/
+.DS_Store
+*.log
