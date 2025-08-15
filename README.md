@@ -66,3 +66,19 @@ Notes:
 - CORS headers are included to allow calling the API from your static site (and preflight is handled).
 - Uses Node runtime for reliable `process.env` access.
 - You can swap to official SDKs later if preferred.
+
+## Phase 1 — Data layer (Neon + Upstash)
+
+1) Create a Neon Postgres database (pick the same region as your Vercel project if possible). Copy the `DATABASE_URL`.
+
+2) In Neon SQL editor, run the schema in `db/schema.sql` (requires `pgcrypto` extension for `gen_random_uuid()`).
+
+3) Create an Upstash Redis database in the same or a nearby region and copy the REST URL and REST TOKEN.
+
+4) Set environment variables in Vercel → Project → Settings → Environment Variables:
+	- `DATABASE_URL` (Neon)
+	- `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (Upstash)
+	- Keep regions aligned with your Vercel region for best latency.
+
+Do not store raw prompts. Only log counts/metadata (see `usage_events`).
+
