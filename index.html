@@ -1,17 +1,2590 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BrandCopy AI - Complete Edition</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <!-- Your full HTML from the message goes here -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Color System */
+      --neutral-0: #FFFFFF;
+      --neutral-50: #FAFAFA;
+      --neutral-100: #F5F5F5;
+      --neutral-200: #E5E5E5;
+      --neutral-300: #D4D4D4;
+      --neutral-400: #A3A3A3;
+      --neutral-500: #737373;
+      --neutral-600: #525252;
+      --neutral-700: #404040;
+      --neutral-800: #262626;
+      --neutral-900: #171717;
+            
+      --primary-50: #EFF6FF;
+      --primary-100: #DBEAFE;
+      --primary-200: #BFDBFE;
+      --primary-400: #60A5FA;
+      --primary-500: #3B82F6;
+      --primary-600: #2563EB;
+      --primary-700: #1D4ED8;
+            
+      --success: #10B981;
+      --success-light: #D1FAE5;
+      --warning: #F59E0B;
+      --warning-light: #FEF3C7;
+      --error: #EF4444;
+      --error-light: #FEE2E2;
+            
+      /* Typography */
+      --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+            
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+            
+      /* Animations */
+      --ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+      /* Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.08);
+            
+      /* Radius */
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      --radius-full: 9999px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--neutral-900);
+      background: linear-gradient(180deg, var(--neutral-50) 0%, var(--neutral-0) 100%);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .header-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      cursor: pointer;
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 18px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .logo-text {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--neutral-900);
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .nav-item {
+      padding: var(--space-2) var(--space-4);
+      color: var(--neutral-600);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .nav-item:hover {
+      color: var(--neutral-900);
+      background: var(--neutral-100);
+    }
+
+    .nav-item.active {
+      color: var(--primary-600);
+      background: var(--primary-50);
+    }
+
+    /* AI Status */
+    .ai-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--success-light);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .ai-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+
+    /* Main Content */
+    .main {
+      padding-top: 72px;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: var(--space-16) 0 var(--space-8);
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, var(--neutral-900) 0%, var(--neutral-600) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--neutral-600);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Context Intelligence */
+    .context-panel {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--neutral-200);
+    }
+
+    .context-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .context-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--neutral-900);
+    }
+
+    .context-metrics {
+      display: flex;
+      gap: var(--space-6);
+      margin-top: var(--space-4);
+    }
+
+    .context-metric {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary-600);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Input Section - Updated */
+    .input-section {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--neutral-200);
+      position: relative;
+    }
+
+    .input-tabs {
+      display: flex;
+      gap: var(--space-1);
+      padding: var(--space-1);
+      background: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-6);
+    }
+
+    .input-tab {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--neutral-600);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+
+    .input-tab:hover {
+      color: var(--neutral-900);
+    }
+
+    .input-tab.active {
+      background: white;
+      color: var(--primary-600);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .input-field {
+      width: 100%;
+      min-height: 160px;
+      padding: var(--space-4);
+      background: var(--neutral-50);
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--neutral-900);
+      resize: vertical;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-500);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Unified Input Styles */
+    .unified-input-container {
+      position: relative;
+    }
+
+    .input-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+    }
+
+    .input-label-group {
+      flex: 1;
+    }
+
+    .input-quick-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .input-action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .input-action-btn:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-500);
+      transform: translateY(-1px);
+    }
+
+    .input-action-btn:active {
+      transform: translateY(0);
+    }
+
+    .input-footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--neutral-100);
+    }
+
+    .mini-action-btn {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--neutral-600);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mini-action-btn:hover {
+      background: var(--neutral-50);
+      border-color: var(--neutral-300);
+      color: var(--neutral-900);
+    }
+
+    /* Controls */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Slider */
+    .slider-container {
+      position: relative;
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .slider-track {
+      width: 100%;
+      height: 4px;
+      background: var(--neutral-200);
+      border-radius: var(--radius-full);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+      border-radius: var(--radius-full);
+      transition: width 0.2s;
+    }
+
+    .slider-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 3px solid var(--primary-500);
+      border-radius: 50%;
+      cursor: grab;
+      box-shadow: var(--shadow-md);
+      transition: all 0.2s;
+    }
+
+    .slider-thumb:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    .slider-thumb:active {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .slider-value {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--neutral-900);
+      color: white;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .slider-thumb:hover .slider-value,
+    .slider-thumb:active .slider-value {
+      opacity: 1;
+    }
+
+    /* Segmented Control */
+    .segmented {
+      display: flex;
+      background: var(--neutral-100);
+      border-radius: var(--radius-md);
+      padding: var(--space-1);
+      gap: var(--space-1);
+    }
+
+    .segment {
+      flex: 1;
+      padding: var(--space-2) var(--space-3);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--neutral-600);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .segment:hover {
+      color: var(--neutral-900);
+    }
+
+    .segment.active {
+      background: white;
+      color: var(--primary-600);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Generate Button */
+    .generate-section {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-10);
+    }
+
+    .generate-btn {
+      flex: 1;
+      padding: var(--space-4) var(--space-8);
+      background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+
+    .generate-btn.loading {
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    /* AI Thinking Panel */
+    .ai-thinking {
+      background: var(--primary-50);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-6);
+      display: none;
+      animation: slideDown 0.3s;
+    }
+
+    .ai-thinking.active {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-thinking-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .ai-thinking-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-600);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .thought-step {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) 0;
+      font-size: 14px;
+      color: var(--neutral-700);
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+
+    .thought-step:nth-child(1) { animation-delay: 0.2s; }
+    .thought-step:nth-child(2) { animation-delay: 0.4s; }
+    .thought-step:nth-child(3) { animation-delay: 0.6s; }
+    .thought-step:nth-child(4) { animation-delay: 0.8s; }
+    .thought-step:nth-child(5) { animation-delay: 1s; }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Results */
+    .results-grid {
+      display: grid;
+      gap: var(--space-6);
+      margin-bottom: var(--space-10);
+    }
+
+    .result-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--neutral-200);
+      transition: all 0.3s;
+      box-shadow: var(--shadow-md);
+    }
+
+    .result-card:hover {
+      box-shadow: var(--shadow-xl);
+      transform: translateY(-2px);
+    }
+
+    .result-header {
+      padding: var(--space-5);
+      background: linear-gradient(135deg, var(--neutral-50), white);
+      border-bottom: 1px solid var(--neutral-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .result-badge {
+      padding: var(--space-1) var(--space-3);
+      background: var(--primary-50);
+      color: var(--primary-700);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--neutral-200);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-size: 16px;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-50);
+      border-color: var(--primary-500);
+    }
+
+    .result-content {
+      padding: var(--space-6);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--neutral-700);
+    }
+
+    .result-metrics {
+      padding: var(--space-5);
+      background: var(--neutral-50);
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid var(--neutral-100);
+    }
+
+    .result-metric {
+      text-align: center;
+    }
+
+    .result-metric-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary-600);
+    }
+
+    .result-metric-label {
+      font-size: 11px;
+      color: var(--neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: var(--space-1);
+    }
+
+    /* Preview Panel */
+    .preview-panel {
+      position: fixed;
+      top: 72px;
+      right: 0;
+      bottom: 0;
+      width: 480px;
+      background: white;
+      border-left: 1px solid var(--neutral-200);
+      transform: translateX(100%);
+      transition: transform 0.3s var(--ease-out);
+      z-index: 900;
+      overflow-y: auto;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-panel.active {
+      transform: translateX(0);
+    }
+
+    .preview-header {
+      padding: var(--space-5);
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--neutral-50);
+    }
+
+    .preview-close {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .preview-close:hover {
+      background: var(--error-light);
+      color: var(--error);
+    }
+
+    .preview-formats {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex;
+      gap: var(--space-2);
+      overflow-x: auto;
+    }
+
+    .format-btn {
+      padding: var(--space-2) var(--space-3);
+      background: white;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--neutral-600);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .format-btn:hover {
+      border-color: var(--primary-500);
+      color: var(--primary-600);
+    }
+
+    .format-btn.active {
+      background: var(--primary-50);
+      border-color: var(--primary-500);
+      color: var(--primary-600);
+    }
+
+    .preview-content {
+      padding: var(--space-6);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: var(--space-8);
+      right: var(--space-8);
+      padding: var(--space-3) var(--space-5);
+      background: var(--neutral-900);
+      color: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 2000;
+    }
+
+    .toast.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Advanced Panel */
+    .advanced-panel {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--neutral-200);
+      display: none;
+    }
+
+    .advanced-panel.active {
+      display: block;
+      animation: slideDown 0.3s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+            
+      .preview-panel {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 32px;
+      }
+            
+      .input-tabs {
+        flex-direction: column;
+      }
+            
+      .generate-section {
+        flex-direction: column;
+      }
+            
+      .nav {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Replace this whole body with your provided HTML/JS/CSS content -->
   <div id="app"></div>
+    
   <script>
-    // Paste the full <script> block you provided (BrandCopyApp class, etc.)
+    class BrandCopyApp {
+      constructor() {
+        this.state = {
+          // Navigation state
+          currentPage: 'create',
+                    
+          // Input state
+          inputText: '',
+          voiceRecording: false,
+          voiceTranscript: '',
+          imageFile: null,
+          imagePreview: null,
+                    
+          // Context state
+          context: 'product',
+          contextData: {
+            product: { title: 'Product Page', lift: '+31%', time: '2-4 PM' },
+            email: { title: 'Email Campaign', lift: '+42%', time: '9 AM' },
+            social: { title: 'Social Media', lift: '+67%', time: '7 PM' },
+            ads: { title: 'Ad Copy', lift: '+23%', time: 'Real-time' }
+          },
+                    
+          // Controls state
+          tone: 50,
+          length: 'medium',
+          creativity: 30,
+                    
+          // AI state
+          loading: false,
+          thinking: false,
+          thoughts: [],
+                    
+          // Results state
+          results: [],
+          savedCopies: [],
+                    
+          // Analytics data
+          analytics: {
+            totalGenerated: 127,
+            avgLift: 31,
+            timesSaved: 42,
+            topPerformer: 'Conversion Optimized'
+          },
+                    
+          // Settings
+          settings: {
+            theme: 'light',
+            autoSave: true,
+            notifications: true,
+            defaultContext: 'product',
+            brandName: '',
+            brandTagline: '',
+            brandVoice: '',
+            brandTone: [],
+            brandPersona: '',
+            extracting: false,
+            extractionConfidence: 0
+          },
+                    
+          // UI state
+          previewActive: false,
+          previewFormat: 'email',
+          previewContent: '',
+          advancedOpen: false
+        };
+                
+        this.init();
+      }
+            
+      init() {
+        this.loadBrandSettings();
+        this.render();
+        this.attachEventListeners();
+      }
+            
+      // Load saved brand settings from localStorage
+      loadBrandSettings() {
+        const saved = localStorage.getItem('brandSettings');
+        if (saved) {
+          try {
+            const settings = JSON.parse(saved);
+            this.state.settings.brandName = settings.brandName || '';
+            this.state.settings.brandTagline = settings.brandTagline || '';
+            this.state.settings.brandVoice = settings.brandVoice || '';
+            this.state.settings.brandTone = settings.brandTone || [];
+            this.state.settings.brandPersona = settings.brandPersona || '';
+          } catch (e) {
+            console.error('Error loading brand settings:', e);
+          }
+        }
+      }
+            
+      render() {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+          ${this.renderHeader()}
+          <main class="main">
+            <div class="container">
+              ${this.renderCurrentPage()}
+            </div>
+          </main>
+          ${this.renderPreviewPanel()}
+          ${this.renderToast()}
+        `;
+                
+        // Re-attach listeners after render
+        this.attachEventListeners();
+      }
+            
+      renderCurrentPage() {
+        switch(this.state.currentPage) {
+          case 'library':
+            return this.renderLibraryPage();
+          case 'analytics':
+            return this.renderAnalyticsPage();
+          case 'settings':
+            return this.renderSettingsPage();
+          default:
+            return this.renderCreatePage();
+        }
+      }
+            
+      renderCreatePage() {
+        return `
+          ${this.renderHero()}
+          ${this.renderContextPanel()}
+          ${this.renderAIThinking()}
+          ${this.renderInputSection()}
+          ${this.renderControls()}
+          ${this.renderAdvancedPanel()}
+          ${this.renderGenerateSection()}
+          ${this.renderResults()}
+        `;
+      }
+            
+      renderLibraryPage() {
+        return `
+          <section class="hero-section">
+            <h1 class="hero-title">Copy Library</h1>
+            <p class="hero-subtitle">Your saved and generated copy, organized and ready to use.</p>
+          </section>
+                    
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 48px;">
+            ${this.state.savedCopies.length > 0 ? 
+              this.state.savedCopies.map((copy, i) => `
+                <div class="result-card">
+                  <div class="result-header">
+                    <div>
+                      <h3 style="font-size: 16px; font-weight: 600;">Saved Copy ${i + 1}</h3>
+                      <span class="result-badge">${copy.context || 'Product'}</span>
+                    </div>
+                    <div class="result-actions">
+                      <button class="action-btn" title="Use">✏️</button>
+                      <button class="action-btn" title="Delete">🗑️</button>
+                    </div>
+                  </div>
+                  <div class="result-content" style="font-size: 14px;">
+                    ${copy.text || 'Sample saved copy...'}
+                  </div>
+                  <div style="padding: 16px; font-size: 12px; color: var(--neutral-500);">
+                    Saved ${copy.date || 'Today'}
+                  </div>
+                </div>
+              `).join('') : `
+              <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
+                <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
+                <h3 style="font-size: 24px; margin-bottom: 8px;">No saved copies yet</h3>
+                <p style="color: var(--neutral-600);">Your optimized copy will be saved here for future use.</p>
+                <button class="generate-btn" style="margin: 24px auto; max-width: 200px;" data-page="create">
+                  Create Your First Copy
+                </button>
+              </div>
+            `}
+          </div>
+        `;
+      }
+            
+      renderAnalyticsPage() {
+        const data = this.state.analytics;
+        return `
+          <section class="hero-section">
+            <h1 class="hero-title">Analytics Dashboard</h1>
+            <p class="hero-subtitle">Track your copy performance and optimization insights.</p>
+          </section>
+                    
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 48px;">
+            <div class="context-panel" style="text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+              <div class="metric-value" style="font-size: 48px;">${data.totalGenerated}</div>
+              <div class="metric-label">Total Copies Generated</div>
+            </div>
+                        
+            <div class="context-panel" style="text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">📈</div>
+              <div class="metric-value" style="font-size: 48px;">+${data.avgLift}%</div>
+              <div class="metric-label">Average Performance Lift</div>
+            </div>
+                        
+            <div class="context-panel" style="text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">⏱️</div>
+              <div class="metric-value" style="font-size: 48px;">${data.timesSaved}h</div>
+              <div class="metric-label">Hours Saved</div>
+            </div>
+                        
+            <div class="context-panel" style="text-align: center;">
+              <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+              <div class="metric-value" style="font-size: 32px; word-break: break-word;">${data.topPerformer}</div>
+              <div class="metric-label">Top Performing Style</div>
+            </div>
+          </div>
+                    
+          <div class="context-panel" style="margin-top: 48px;">
+            <h2 style="font-size: 24px; margin-bottom: 24px;">Performance Over Time</h2>
+            <div style="height: 300px; background: linear-gradient(135deg, var(--primary-50), var(--neutral-50)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--neutral-500);">
+              <div style="text-align: center;">
+                <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                <p>Performance chart visualization would appear here</p>
+              </div>
+            </div>
+          </div>
+                    
+          <div class="context-panel" style="margin-top: 24px;">
+            <h2 style="font-size: 24px; margin-bottom: 24px;">Recent Activity</h2>
+            <div style="display: grid; gap: 16px;">
+              <div style="padding: 16px; background: var(--neutral-50); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Product Page Copy</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Generated 3 variants • +34% predicted lift</div>
+                </div>
+                <span style="color: var(--neutral-500); font-size: 14px;">2 hours ago</span>
+              </div>
+              <div style="padding: 16px; background: var(--neutral-50); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Email Campaign</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Generated 3 variants • +42% predicted lift</div>
+                </div>
+                <span style="color: var(--neutral-500); font-size: 14px;">Yesterday</span>
+              </div>
+              <div style="padding: 16px; background: var(--neutral-50); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Social Media Post</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Generated 3 variants • +67% predicted lift</div>
+                </div>
+                <span style="color: var(--neutral-500); font-size: 14px;">2 days ago</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderSettingsPage() {
+        const settings = this.state.settings;
+        return `
+          <section class="hero-section">
+            <h1 class="hero-title">Settings</h1>
+            <p class="hero-subtitle">Customize your BrandCopy AI experience.</p>
+          </section>
+                    
+          <div class="context-panel" style="margin-top: 48px;">
+            <h2 style="font-size: 20px; margin-bottom: 24px;">General Settings</h2>
+                        
+            <div style="display: grid; gap: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--neutral-200);">
+                <div>
+                  <strong>Theme</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Choose your preferred color scheme</div>
+                </div>
+                <div class="segmented">
+                  <button class="segment ${settings.theme === 'light' ? 'active' : ''}" data-setting="theme" data-value="light">Light</button>
+                  <button class="segment ${settings.theme === 'dark' ? 'active' : ''}" data-setting="theme" data-value="dark">Dark</button>
+                  <button class="segment ${settings.theme === 'auto' ? 'active' : ''}" data-setting="theme" data-value="auto">Auto</button>
+                </div>
+              </div>
+                            
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--neutral-200);">
+                <div>
+                  <strong>Auto-save</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Automatically save generated copies to library</div>
+                </div>
+                <button class="segment ${settings.autoSave ? 'active' : ''}" data-setting="autoSave" style="padding: 8px 24px;">
+                  ${settings.autoSave ? 'Enabled' : 'Disabled'}
+                </button>
+              </div>
+                            
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--neutral-200);">
+                <div>
+                  <strong>Notifications</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Show toast notifications for actions</div>
+                </div>
+                <button class="segment ${settings.notifications ? 'active' : ''}" data-setting="notifications" style="padding: 8px 24px;">
+                  ${settings.notifications ? 'Enabled' : 'Disabled'}
+                </button>
+              </div>
+                            
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--neutral-200);">
+                <div>
+                  <strong>Default Context</strong>
+                  <div style="font-size: 14px; color: var(--neutral-600); margin-top: 4px;">Set your preferred starting context</div>
+                </div>
+                <select id="defaultContextSelect" style="padding: 8px 16px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px; background: white;">
+                  <option ${settings.defaultContext === 'product' ? 'selected' : ''}>Product</option>
+                  <option ${settings.defaultContext === 'email' ? 'selected' : ''}>Email</option>
+                  <option ${settings.defaultContext === 'social' ? 'selected' : ''}>Social</option>
+                  <option ${settings.defaultContext === 'ads' ? 'selected' : ''}>Ads</option>
+                </select>
+              </div>
+            </div>
+          </div>
+                    
+          <div class="context-panel" style="margin-top: 24px;">
+            <h2 style="font-size: 20px; margin-bottom: 24px;">Brand Settings</h2>
+                        
+            <!-- AI Brand Extraction Section -->
+            <div style="background: linear-gradient(135deg, var(--primary-50), var(--neutral-50)); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="width: 40px; height: 40px; background: var(--primary-600); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                  🧠
+                </div>
+                <div>
+                  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">AI Brand Voice Extraction</h3>
+                  <p style="font-size: 14px; color: var(--neutral-600);">Upload or paste your existing content to automatically extract brand characteristics</p>
+                </div>
+              </div>
+                            
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div>
+                  <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--neutral-700);">Paste Content</label>
+                  <textarea 
+                    id="brandExtractText"
+                    placeholder="Paste your website copy, marketing materials, or any brand content here..."
+                    style="width: 100%; padding: 12px; border: 2px solid var(--neutral-200); border-radius: 8px; font-size: 14px; min-height: 120px; resize: vertical; background: white;"
+                  ></textarea>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--neutral-700);">Or Upload Files</label>
+                  <div 
+                    id="brandDropZone"
+                    style="width: 100%; height: 120px; border: 2px dashed var(--neutral-300); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: white; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='var(--primary-500)'; this.style.background='var(--primary-50)'"
+                    onmouseout="this.style.borderColor='var(--neutral-300)'; this.style.background='white'"
+                  >
+                    <div style="font-size: 32px; margin-bottom: 8px;">📄</div>
+                    <div style="font-size: 14px; color: var(--neutral-600);">Drop files or click to upload</div>
+                    <div style="font-size: 12px; color: var(--neutral-400); margin-top: 4px;">PDF, TXT, DOCX supported</div>
+                  </div>
+                </div>
+              </div>
+                            
+              <button 
+                id="extractBrandBtn"
+                class="generate-btn ${settings.extracting ? 'loading' : ''}" 
+                style="width: 100%; margin-bottom: 16px;"
+              >
+                ${settings.extracting ? '<span class="spinner"></span> Analyzing...' : '🎯 Extract Brand Voice with AI'}
+              </button>
+                            
+              ${settings.extractionConfidence > 0 ? `
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 8px;">
+                  <span style="font-size: 13px; font-weight: 600; color: var(--neutral-700);">Extraction Confidence:</span>
+                  <div style="flex: 1; height: 6px; background: var(--neutral-200); border-radius: 3px; overflow: hidden;">
+                    <div style="width: ${settings.extractionConfidence}%; height: 100%; background: linear-gradient(90deg, var(--success), var(--primary-600)); transition: width 0.5s;"></div>
+                  </div>
+                  <span style="font-size: 13px; font-weight: 600; color: var(--success);">${settings.extractionConfidence}%</span>
+                </div>
+              ` : ''}
+            </div>
+                        
+            <!-- Extracted/Manual Brand Settings -->
+            <div style="display: grid; gap: 24px;">
+              <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Brand Name</label>
+                <input 
+                  type="text" 
+                  id="brandNameInput"
+                  placeholder="Your Brand" 
+                  value="${settings.brandName}"
+                  style="width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px;">
+              </div>
+                            
+              <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Brand Tagline</label>
+                <input 
+                  type="text" 
+                  id="brandTaglineInput"
+                  placeholder="Your memorable tagline" 
+                  value="${settings.brandTagline}"
+                  style="width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px;">
+              </div>
+                            
+              <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Brand Voice & Personality</label>
+                <textarea 
+                  id="brandVoiceInput"
+                  placeholder="Describe your brand's voice and personality..."
+                  style="width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px; min-height: 100px; resize: vertical;"
+                >${settings.brandVoice}</textarea>
+              </div>
+                            
+              <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Brand Tone Attributes</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                  ${['Professional', 'Friendly', 'Bold', 'Innovative', 'Trustworthy', 'Playful', 'Sophisticated', 'Direct', 'Warm', 'Technical', 'Inspiring', 'Practical'].map(tone => `
+                    <button 
+                      class="segment ${settings.brandTone.includes(tone) ? 'active' : ''}" 
+                      data-tone="${tone}"
+                      style="padding: 8px 16px; border-radius: 20px;"
+                    >
+                      ${tone}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+                            
+              <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px;">Target Audience Persona</label>
+                <textarea 
+                  id="brandPersonaInput"
+                  placeholder="Describe your target audience..."
+                  style="width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px; min-height: 80px; resize: vertical;"
+                >${settings.brandPersona}</textarea>
+              </div>
+            </div>
+                        
+            <button id="saveBrandBtn" class="generate-btn" style="margin-top: 24px;">
+              💾 Save Brand Settings
+            </button>
+          </div>
+                    
+          <div class="context-panel" style="margin-top: 24px;">
+            <h2 style="font-size: 20px; margin-bottom: 24px;">Account</h2>
+                        
+            <div style="display: grid; gap: 16px;">
+              <button class="segment" style="padding: 12px 20px; justify-content: space-between;">
+                <span>Export Data</span>
+                <span>📤</span>
+              </button>
+              <button class="segment" style="padding: 12px 20px; justify-content: space-between;">
+                <span>Clear Cache</span>
+                <span>🗑️</span>
+              </button>
+              <button class="segment" style="padding: 12px 20px; justify-content: space-between; color: var(--error);">
+                <span>Reset All Settings</span>
+                <span>⚠️</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderHeader() {
+        return `
+          <header class="header">
+            <div class="container">
+              <div class="header-inner">
+                <div class="logo-group">
+                  <div class="logo-mark">AI</div>
+                  <div class="logo-text">BrandCopy</div>
+                </div>
+                                
+                <nav class="nav">
+                  <a href="#" class="nav-item ${this.state.currentPage === 'create' ? 'active' : ''}" data-page="create">Create</a>
+                  <a href="#" class="nav-item ${this.state.currentPage === 'library' ? 'active' : ''}" data-page="library">Library</a>
+                  <a href="#" class="nav-item ${this.state.currentPage === 'analytics' ? 'active' : ''}" data-page="analytics">Analytics</a>
+                  <a href="#" class="nav-item ${this.state.currentPage === 'settings' ? 'active' : ''}" data-page="settings">Settings</a>
+                </nav>
+                                
+                <div class="ai-status">
+                  <div class="ai-pulse"></div>
+                  <span>AI Active</span>
+                </div>
+              </div>
+            </div>
+          </header>
+        `;
+      }
+            
+      renderHero() {
+        return `
+          <section class="hero-section">
+            <h1 class="hero-title">Intelligent Copy That Converts</h1>
+            <p class="hero-subtitle">
+              AI-powered optimization that understands context, preserves your voice, 
+              and delivers measurable results.
+            </p>
+          </section>
+        `;
+      }
+            
+      renderContextPanel() {
+        const ctx = this.state.contextData[this.state.context];
+        return `
+          <div class="context-panel">
+            <div class="context-header">
+              <div>
+                <h2 class="context-title">${ctx.title} Optimization</h2>
+                <p style="color: var(--neutral-600); margin-top: 4px;">
+                  AI optimizes for ${this.state.context === 'product' ? 'conversions' : 
+                  this.state.context === 'email' ? 'opens and clicks' :
+                  this.state.context === 'social' ? 'engagement' : 'CTR'}
+                </p>
+              </div>
+              <div style="display: flex; gap: var(--space-2);">
+                ${['product', 'email', 'social', 'ads'].map(c => `
+                  <button class="segment ${this.state.context === c ? 'active' : ''}" 
+                      data-context="${c}" 
+                      style="padding: 8px 16px;">
+                    ${c.charAt(0).toUpperCase() + c.slice(1)}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="context-metrics">
+              <div class="context-metric">
+                <div class="metric-value">${ctx.lift}</div>
+                <div class="metric-label">Average Lift</div>
+              </div>
+              <div class="context-metric">
+                <div class="metric-value">${ctx.time}</div>
+                <div class="metric-label">Best Time</div>
+              </div>
+              <div class="context-metric">
+                <div class="metric-value">94%</div>
+                <div class="metric-label">Confidence</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderAIThinking() {
+        return `
+          <div class="ai-thinking ${this.state.thinking ? 'active' : ''}">
+            <div class="ai-thinking-header">
+              <div class="ai-thinking-icon">🧠</div>
+              <h3 style="font-size: 16px; font-weight: 600;">AI Chain of Thought</h3>
+            </div>
+            <div>
+              ${this.state.thoughts.map((thought, i) => `
+                <div class="thought-step">
+                  <span style="color: var(--primary-600); font-weight: 600;">${i + 1}.</span>
+                  ${thought}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+            
+      renderInputSection() {
+        return `
+          <div class="input-section">
+            <div class="unified-input-container">
+              <div class="input-header-row">
+                <div class="input-label-group">
+                  <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Input Your Content</h3>
+                  <p style="font-size: 13px; color: var(--neutral-600);">Type, paste, speak, upload, or import from URL</p>
+                </div>
+                <div class="input-quick-actions">
+                  <button class="input-action-btn" id="voiceBtn" title="Voice input" 
+                      style="${this.state.voiceRecording ? 'background: var(--error); color: white;' : ''}">
+                    ${this.state.voiceRecording ? '⏸️' : '🎤'}
+                  </button>
+                  <button class="input-action-btn" id="imageBtn" title="Upload image">
+                    📷
+                  </button>
+                  <button class="input-action-btn" id="urlBtn" title="Import from URL">
+                    🔗
+                  </button>
+                  <button class="input-action-btn" id="clearBtn" title="Clear input">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+                            
+              <textarea 
+                class="input-field"
+                id="textInput"
+                placeholder="Start typing or paste your copy here. AI will analyze tone, intent, and provide real-time optimization suggestions...
+
+You can also:
+• Click 🎤 to record voice input
+• Click 📷 to upload an image with text
+• Click 🔗 to import content from a URL"
+                style="min-height: 180px;"
+              >${this.state.inputText}</textarea>
+                            
+              ${this.state.voiceRecording ? `
+                <div style="padding: 12px; background: var(--error-light); border-radius: 8px; margin-top: 12px; display: flex; align-items: center; gap: 12px;">
+                  <div class="ai-pulse" style="background: var(--error);"></div>
+                  <span style="color: var(--error); font-weight: 500;">Recording... Speak clearly</span>
+                </div>
+              ` : ''}
+                            
+              ${this.state.voiceTranscript && !this.state.inputText ? `
+                <div style="padding: 12px; background: var(--success-light); border-radius: 8px; margin-top: 12px;">
+                  <span style="color: var(--success); font-weight: 500; font-size: 13px;">Voice transcribed:</span>
+                  <p style="margin-top: 4px; color: var(--neutral-700);">"${this.state.voiceTranscript}"</p>
+                </div>
+              ` : ''}
+                            
+              ${this.state.imagePreview ? `
+                <div style="margin-top: 12px; padding: 12px; background: var(--neutral-50); border-radius: 8px;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="${this.state.imagePreview}" 
+                       style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;">
+                    <div style="flex: 1;">
+                      <span style="font-size: 13px; font-weight: 500; color: var(--neutral-700);">Image uploaded</span>
+                      <p style="font-size: 12px; color: var(--neutral-600); margin-top: 2px;">Text extraction in progress...</p>
+                    </div>
+                    <button class="input-action-btn" onclick="app.clearImage()">✕</button>
+                  </div>
+                </div>
+              ` : ''}
+                            
+              <div class="input-footer-info">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <span style="font-size: 12px; color: var(--neutral-500);">
+                    ${this.state.inputText.length} characters
+                  </span>
+                  ${this.detectFacts(this.state.inputText).length > 0 ? `
+                    <span style="font-size: 12px; color: var(--success); font-weight: 500;">
+                      🔒 ${this.detectFacts(this.state.inputText).length} facts detected
+                    </span>
+                  ` : ''}
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button class="mini-action-btn" onclick="app.pasteFromClipboard()">
+                    📋 Paste
+                  </button>
+                  <button class="mini-action-btn" onclick="app.loadExample()">
+                    ✨ Load Example
+                  </button>
+                </div>
+              </div>
+            </div>
+                        
+            <!-- Hidden file input for image upload -->
+            <input type="file" id="hiddenImageInput" accept="image/*" style="display: none;">
+                        
+            <!-- Hidden URL input modal -->
+            <div id="urlModal" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 24px; border-radius: 12px; box-shadow: var(--shadow-xl); z-index: 100; min-width: 400px;">
+              <h4 style="margin-bottom: 16px;">Import from URL</h4>
+              <input type="url" id="urlModalInput" placeholder="https://example.com" style="width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: 8px; margin-bottom: 16px;">
+              <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="app.closeUrlModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="app.importFromUrl()">Import</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderControls() {
+        return `
+          <div class="controls-grid">
+            <div class="control-group">
+              <label class="control-label">Tone</label>
+              <div class="slider-container">
+                <div class="slider-track" id="toneSlider">
+                  <div class="slider-fill" style="width: ${this.state.tone}%"></div>
+                  <div class="slider-thumb" style="left: ${this.state.tone}%">
+                    <div class="slider-value">${this.state.tone}</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--neutral-500); margin-top: 8px;">
+                <span>Formal</span>
+                <span>Balanced</span>
+                <span>Casual</span>
+              </div>
+            </div>
+                        
+            <div class="control-group">
+              <label class="control-label">Length</label>
+              <div class="segmented">
+                ${['short', 'medium', 'long'].map(l => `
+                  <button class="segment ${this.state.length === l ? 'active' : ''}" 
+                      data-length="${l}">
+                    ${l.charAt(0).toUpperCase() + l.slice(1)}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+                        
+            <div class="control-group">
+              <label class="control-label">Creativity</label>
+              <div class="slider-container">
+                <div class="slider-track" id="creativitySlider">
+                  <div class="slider-fill" style="width: ${this.state.creativity}%"></div>
+                  <div class="slider-thumb" style="left: ${this.state.creativity}%">
+                    <div class="slider-value">${this.state.creativity}</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--neutral-500); margin-top: 8px;">
+                <span>Safe</span>
+                <span>Balanced</span>
+                <span>Bold</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderAdvancedPanel() {
+        return `
+          <div class="advanced-panel ${this.state.advancedOpen ? 'active' : ''}">
+            <h3 style="margin-bottom: 24px;">Advanced Settings</h3>
+            <div class="controls-grid">
+              <div class="control-group">
+                <label class="control-label">Optimization Goal</label>
+                <select style="padding: 10px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px;">
+                  <option>Maximize Conversions</option>
+                  <option>Increase Engagement</option>
+                  <option>Build Trust</option>
+                  <option>Drive Urgency</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Emotional Target</label>
+                <select style="padding: 10px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px;">
+                  <option>Excitement</option>
+                  <option>Trust</option>
+                  <option>Curiosity</option>
+                  <option>Confidence</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Structure</label>
+                <select style="padding: 10px; border: 1px solid var(--neutral-200); border-radius: 8px; font-size: 14px;">
+                  <option>AIDA</option>
+                  <option>PAS</option>
+                  <option>FAB</option>
+                  <option>Before-After-Bridge</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+            
+      renderGenerateSection() {
+        return `
+          <div class="generate-section">
+            <button class="generate-btn ${this.state.loading ? 'loading' : ''}" id="generateBtn">
+              ${this.state.loading ? '<span class="spinner"></span>' : '⚡'}
+              ${this.state.loading ? 'AI is optimizing...' : 'Generate Optimized Copy'}
+            </button>
+            <button class="segment" id="advancedBtn" style="padding: 16px 24px;">
+              ⚙️ Advanced
+            </button>
+          </div>
+        `;
+      }
+            
+      renderResults() {
+        if (this.state.results.length === 0) return '';
+                
+        return `
+          <div class="results-grid">
+            ${this.state.results.map((result, index) => `
+              <div class="result-card">
+                <div class="result-header">
+                  <div>
+                    <h3 style="font-size: 18px; font-weight: 600;">
+                      Variant ${index + 1}
+                    </h3>
+                    <span class="result-badge">${result.style}</span>
+                  </div>
+                  <div class="result-actions">
+                    <button class="action-btn" data-action="preview" data-index="${index}" title="Preview">
+                      👁️
+                    </button>
+                    <button class="action-btn" data-action="copy" data-index="${index}" title="Copy">
+                      📋
+                    </button>
+                    <button class="action-btn" data-action="export" data-index="${index}" title="Export">
+                      📤
+                    </button>
+                  </div>
+                </div>
+                <div class="result-content">
+                  ${result.text}
+                </div>
+                <div class="result-metrics">
+                  <div class="result-metric">
+                    <div class="result-metric-value">+${result.lift}%</div>
+                    <div class="result-metric-label">Predicted Lift</div>
+                  </div>
+                  <div class="result-metric">
+                    <div class="result-metric-value">${result.score}</div>
+                    <div class="result-metric-label">Quality Score</div>
+                  </div>
+                  <div class="result-metric">
+                    <div class="result-metric-value">${result.readability}</div>
+                    <div class="result-metric-label">Readability</div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+            
+      renderPreviewPanel() {
+        return `
+          <div class="preview-panel ${this.state.previewActive ? 'active' : ''}">
+            <div class="preview-header">
+              <h3 style="font-size: 18px; font-weight: 600;">Preview</h3>
+              <button class="preview-close" id="closePreview">✕</button>
+            </div>
+            <div class="preview-formats">
+              ${['email', 'social', 'ad', 'landing'].map(f => `
+                <button class="format-btn ${this.state.previewFormat === f ? 'active' : ''}" 
+                    data-format="${f}">
+                  ${f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              `).join('')}
+            </div>
+            <div class="preview-content">
+              ${this.renderPreviewContent()}
+            </div>
+          </div>
+        `;
+      }
+            
+      renderPreviewContent() {
+        const content = this.state.previewContent || 'Your optimized copy will appear here...';
+                
+        switch(this.state.previewFormat) {
+          case 'email':
+            return `
+              <div style="background: white; border-radius: 8px; box-shadow: var(--shadow-md); overflow: hidden;">
+                <div style="padding: 20px; background: var(--neutral-50); border-bottom: 1px solid var(--neutral-200);">
+                  <div style="font-size: 13px; color: var(--neutral-600); margin-bottom: 8px;">
+                    <strong>From:</strong> Your Brand &lt;hello@brand.com&gt;
+                  </div>
+                  <div style="font-size: 13px; color: var(--neutral-600);">
+                    <strong>Subject:</strong> 🎯 ${content.substring(0, 50)}...
+                  </div>
+                </div>
+                <div style="padding: 24px; font-size: 15px; line-height: 1.7;">
+                  ${content}
+                </div>
+              </div>
+            `;
+                    
+          case 'social':
+            return `
+              <div style="background: white; border-radius: 12px; box-shadow: var(--shadow-md); overflow: hidden;">
+                <div style="padding: 20px; display: flex; gap: 12px;">
+                  <div style="width: 48px; height: 48px; background: var(--primary-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                    YB
+                  </div>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 4px;">Your Brand</div>
+                    <div style="font-size: 13px; color: var(--neutral-500);">Just now</div>
+                  </div>
+                </div>
+                <div style="padding: 0 20px 20px; font-size: 15px; line-height: 1.6;">
+                  ${content}
+                </div>
+                <div style="padding: 16px 20px; border-top: 1px solid var(--neutral-100); display: flex; justify-content: space-around; font-size: 14px; color: var(--neutral-600);">
+                  <span>👍 Like</span>
+                  <span>💬 Comment</span>
+                  <span>🔄 Share</span>
+                </div>
+              </div>
+            `;
+                    
+          case 'ad':
+            return `
+              <div style="background: white; border: 1px solid var(--neutral-200); border-radius: 8px; padding: 16px;">
+                <div style="font-size: 11px; color: var(--neutral-500); margin-bottom: 8px;">Ad</div>
+                <div style="font-size: 20px; color: #1a0dab; font-weight: 600; margin-bottom: 4px; cursor: pointer;">
+                  ${content.substring(0, 30)}
+                </div>
+                <div style="font-size: 13px; color: #006621; margin-bottom: 8px;">
+                  www.yourbrand.com
+                </div>
+                <div style="font-size: 14px; color: var(--neutral-700); line-height: 1.5;">
+                  ${content}
+                </div>
+              </div>
+            `;
+                    
+          default:
+            return `<div style="padding: 20px;">${content}</div>`;
+        }
+      }
+            
+      renderToast() {
+        return `<div class="toast" id="toast"></div>`;
+      }
+            
+      // Event Listeners
+      attachEventListeners() {
+        // Navigation
+        document.querySelectorAll('[data-page]').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.navigateTo(e.currentTarget.dataset.page);
+          });
+        });
+                
+        // Only attach Create page listeners if we're on that page
+        if (this.state.currentPage === 'create') {
+          // Text input
+          const textInput = document.getElementById('textInput');
+          if (textInput) {
+            textInput.addEventListener('input', (e) => {
+              this.state.inputText = e.target.value;
+            });
+          }
+                    
+          // Voice button
+          const voiceBtn = document.getElementById('voiceBtn');
+          if (voiceBtn) {
+            voiceBtn.addEventListener('click', () => {
+              this.toggleVoiceRecording();
+            });
+          }
+                    
+          // Image button
+          const imageBtn = document.getElementById('imageBtn');
+          if (imageBtn) {
+            imageBtn.addEventListener('click', () => {
+              const input = document.getElementById('hiddenImageInput');
+              if (input) input.click();
+            });
+          }
+                    
+          // Hidden image input
+          const hiddenImageInput = document.getElementById('hiddenImageInput');
+          if (hiddenImageInput) {
+            hiddenImageInput.addEventListener('change', (e) => {
+              if (e.target.files[0]) {
+                this.handleImageUpload(e.target.files[0]);
+              }
+            });
+          }
+                    
+          // URL button
+          const urlBtn = document.getElementById('urlBtn');
+          if (urlBtn) {
+            urlBtn.addEventListener('click', () => {
+              this.showUrlModal();
+            });
+          }
+                    
+          // Clear button
+          const clearBtn = document.getElementById('clearBtn');
+          if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+              this.clearInput();
+            });
+          }
+                    
+          // Context switching
+          document.querySelectorAll('[data-context]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              this.state.context = e.currentTarget.dataset.context;
+              this.render();
+            });
+          });
+                    
+          // Length controls
+          document.querySelectorAll('[data-length]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              this.state.length = e.currentTarget.dataset.length;
+              this.render();
+            });
+          });
+                    
+          // Sliders
+          this.initSlider('toneSlider', 'tone');
+          this.initSlider('creativitySlider', 'creativity');
+                    
+          // Generate button
+          const generateBtn = document.getElementById('generateBtn');
+          if (generateBtn && !this.state.loading) {
+            generateBtn.addEventListener('click', () => {
+              this.generate();
+            });
+          }
+                    
+          // Advanced button
+          const advancedBtn = document.getElementById('advancedBtn');
+          if (advancedBtn) {
+            advancedBtn.addEventListener('click', () => {
+              this.state.advancedOpen = !this.state.advancedOpen;
+              this.render();
+            });
+          }
+                    
+          // Result actions
+          document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const action = e.currentTarget.dataset.action;
+              const index = parseInt(e.currentTarget.dataset.index);
+              this.handleResultAction(action, index);
+            });
+          });
+        }
+                
+        // Settings page listeners
+        if (this.state.currentPage === 'settings') {
+          // General settings
+          document.querySelectorAll('[data-setting]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const setting = e.currentTarget.dataset.setting;
+              const value = e.currentTarget.dataset.value;
+                            
+              if (setting === 'theme') {
+                this.state.settings.theme = value;
+              } else if (setting === 'autoSave' || setting === 'notifications') {
+                this.state.settings[setting] = !this.state.settings[setting];
+              }
+                            
+              this.render();
+              this.showToast('Settings updated');
+            });
+          });
+                    
+          // Default context selector
+          const defaultContextSelect = document.getElementById('defaultContextSelect');
+          if (defaultContextSelect) {
+            defaultContextSelect.addEventListener('change', (e) => {
+              this.state.settings.defaultContext = e.target.value.toLowerCase();
+              this.showToast('Default context updated');
+            });
+          }
+                    
+          // Brand extraction button
+          const extractBrandBtn = document.getElementById('extractBrandBtn');
+          if (extractBrandBtn && !this.state.settings.extracting) {
+            extractBrandBtn.addEventListener('click', () => {
+              this.extractBrandVoice();
+            });
+          }
+                    
+          // Brand drop zone for file upload
+          const brandDropZone = document.getElementById('brandDropZone');
+          if (brandDropZone) {
+            brandDropZone.addEventListener('click', () => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = '.txt,.pdf,.docx';
+              input.onchange = (e) => this.handleBrandFileUpload(e.target.files[0]);
+              input.click();
+            });
+                        
+            brandDropZone.addEventListener('dragover', (e) => {
+              e.preventDefault();
+              brandDropZone.style.borderColor = 'var(--primary-500)';
+              brandDropZone.style.background = 'var(--primary-50)';
+            });
+                        
+            brandDropZone.addEventListener('dragleave', () => {
+              brandDropZone.style.borderColor = 'var(--neutral-300)';
+              brandDropZone.style.background = 'white';
+            });
+                        
+            brandDropZone.addEventListener('drop', (e) => {
+              e.preventDefault();
+              brandDropZone.style.borderColor = 'var(--neutral-300)';
+              brandDropZone.style.background = 'white';
+              if (e.dataTransfer.files[0]) {
+                this.handleBrandFileUpload(e.dataTransfer.files[0]);
+              }
+            });
+          }
+                    
+          // Tone attribute buttons
+          document.querySelectorAll('[data-tone]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const tone = e.currentTarget.dataset.tone;
+              const index = this.state.settings.brandTone.indexOf(tone);
+                            
+              if (index > -1) {
+                this.state.settings.brandTone.splice(index, 1);
+              } else {
+                this.state.settings.brandTone.push(tone);
+              }
+                            
+              this.render();
+            });
+          });
+                    
+          // Save brand settings button
+          const saveBrandBtn = document.getElementById('saveBrandBtn');
+          if (saveBrandBtn) {
+            saveBrandBtn.addEventListener('click', () => {
+              this.saveBrandSettings();
+            });
+          }
+                    
+          // Brand input fields
+          const brandNameInput = document.getElementById('brandNameInput');
+          if (brandNameInput) {
+            brandNameInput.addEventListener('input', (e) => {
+              this.state.settings.brandName = e.target.value;
+            });
+          }
+                    
+          const brandTaglineInput = document.getElementById('brandTaglineInput');
+          if (brandTaglineInput) {
+            brandTaglineInput.addEventListener('input', (e) => {
+              this.state.settings.brandTagline = e.target.value;
+            });
+          }
+                    
+          const brandVoiceInput = document.getElementById('brandVoiceInput');
+          if (brandVoiceInput) {
+            brandVoiceInput.addEventListener('input', (e) => {
+              this.state.settings.brandVoice = e.target.value;
+            });
+          }
+                    
+          const brandPersonaInput = document.getElementById('brandPersonaInput');
+          if (brandPersonaInput) {
+            brandPersonaInput.addEventListener('input', (e) => {
+              this.state.settings.brandPersona = e.target.value;
+            });
+          }
+        }
+                
+        // Preview close (works on all pages)
+        const closePreview = document.getElementById('closePreview');
+        if (closePreview) {
+          closePreview.addEventListener('click', () => {
+            this.state.previewActive = false;
+            this.render();
+          });
+        }
+                
+        // Preview format buttons
+        document.querySelectorAll('[data-format]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            this.state.previewFormat = e.currentTarget.dataset.format;
+            this.render();
+          });
+        });
+      }
+            
+      // Navigation method
+      navigateTo(page) {
+        this.state.currentPage = page;
+        this.render();
+        window.scrollTo(0, 0);
+        this.showToast(`Navigated to ${page.charAt(0).toUpperCase() + page.slice(1)}`);
+      }
+            
+      // Slider functionality
+      initSlider(sliderId, property) {
+        const slider = document.getElementById(sliderId);
+        if (!slider) return;
+                
+        let isDragging = false;
+                
+        const updateSlider = (e) => {
+          const rect = slider.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+          this.state[property] = Math.round(percentage);
+                    
+          // Update UI without full re-render
+          const fill = slider.querySelector('.slider-fill');
+          const thumb = slider.querySelector('.slider-thumb');
+          const value = thumb.querySelector('.slider-value');
+                    
+          if (fill) fill.style.width = percentage + '%';
+          if (thumb) thumb.style.left = percentage + '%';
+          if (value) value.textContent = Math.round(percentage);
+        };
+                
+        slider.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          updateSlider(e);
+        });
+                
+        document.addEventListener('mousemove', (e) => {
+          if (isDragging) updateSlider(e);
+        });
+                
+        document.addEventListener('mouseup', () => {
+          isDragging = false;
+        });
+                
+        slider.addEventListener('click', updateSlider);
+      }
+            
+      // Voice recording
+      toggleVoiceRecording() {
+        this.state.voiceRecording = !this.state.voiceRecording;
+                
+        if (this.state.voiceRecording) {
+          // Simulate recording
+          setTimeout(() => {
+            this.state.voiceTranscript = "Transform your business with our innovative solution that delivers real results.";
+            this.state.voiceRecording = false;
+            this.state.inputText = this.state.voiceTranscript; // Add transcript to input field
+            this.render();
+            this.showToast('✓ Voice transcribed successfully');
+          }, 3000);
+        }
+                
+        this.render();
+      }
+            
+      // Image upload
+      handleImageUpload(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.state.imageFile = file;
+          this.state.imagePreview = e.target.result;
+                    
+          // Simulate text extraction
+          setTimeout(() => {
+            const extractedText = "Premium Quality • Innovative Design • Sustainable Materials • Free Shipping";
+            this.state.inputText = this.state.inputText ? 
+              this.state.inputText + '\n\n' + extractedText : 
+              extractedText;
+            this.showToast('✓ Text extracted from image');
+            this.render();
+          }, 2000);
+                    
+          this.render();
+        };
+        reader.readAsDataURL(file);
+      }
+            
+      // Generate optimization
+      async generate() {
+        if (!this.state.inputText) {
+          this.showToast('Please enter some text to optimize');
+          return;
+        }
+                
+        this.state.loading = true;
+        this.state.thinking = true;
+        this.state.thoughts = [];
+        this.render();
+                
+        // Simulate AI thinking
+        const thoughts = [
+          'Analyzing original tone and intent...',
+          'Identifying key facts and claims to preserve...',
+          'Applying ' + this.state.context + '-specific optimizations...',
+          'Generating multiple style variations...',
+          'Scoring variants for predicted performance...'
+        ];
+                
+        for (let i = 0; i < thoughts.length; i++) {
+          await new Promise(resolve => setTimeout(resolve, 400));
+          this.state.thoughts.push(thoughts[i]);
+          this.render();
+        }
+                
+        await new Promise(resolve => setTimeout(resolve, 500));
+                
+        // Generate results
+        const baseText = this.state.inputText || 'Transform your business with our innovative solution.';
+                
+        this.state.results = [
+          {
+            style: 'Conversion Optimized',
+            text: this.optimizeForConversion(baseText),
+            lift: 34,
+            score: 92,
+            readability: 'Grade 8'
+          },
+          {
+            style: 'Emotional Appeal',
+            text: this.optimizeForEmotion(baseText),
+            lift: 28,
+            score: 89,
+            readability: 'Grade 7'
+          },
+          {
+            style: 'Data Driven',
+            text: this.optimizeWithData(baseText),
+            lift: 31,
+            score: 94,
+            readability: 'Grade 9'
+          }
+        ];
+                
+        // Auto-save to library if enabled
+        if (this.state.settings.autoSave) {
+          this.state.results.forEach(result => {
+            this.state.savedCopies.push({
+              text: result.text,
+              context: this.state.context,
+              date: new Date().toLocaleDateString(),
+              style: result.style,
+              score: result.score
+            });
+          });
+                    
+          // Keep only last 10 saved copies
+          if (this.state.savedCopies.length > 10) {
+            this.state.savedCopies = this.state.savedCopies.slice(-10);
+          }
+        }
+                
+        // Update analytics
+        this.state.analytics.totalGenerated += 3;
+        this.state.analytics.avgLift = Math.round((this.state.analytics.avgLift + 31) / 2);
+                
+        this.state.loading = false;
+        this.state.thinking = false;
+        this.render();
+                
+        this.showToast('✨ Generated 3 optimized variants!');
+      }
+            
+      optimizeForConversion(text) {
+        const prefix = this.state.context === 'product' ? '🚀 ' : 
+                 this.state.context === 'email' ? 'Exclusive: ' :
+                 this.state.context === 'social' ? '🔥 ' : '';
+                
+        return `${prefix}${text}\n\n✓ Trusted by 10,000+ customers\n✓ 30-day money-back guarantee\n✓ See results in 24 hours\n\n⚡ Limited time: Save 40% today\n\n→ Get Started Now`;
+      }
+            
+      optimizeForEmotion(text) {
+        return `Imagine ${text.toLowerCase()}\n\nYou deserve solutions that understand your journey. That's why we've crafted something special just for ambitious professionals like you.\n\n"This changed everything for me" - Sarah M., CEO\n\n💫 Begin your transformation today`;
+      }
+            
+      optimizeWithData(text) {
+        return `87% of industry leaders choose us because ${text.toLowerCase()}\n\n📊 The numbers speak for themselves:\n• 3.2x faster results\n• 94% satisfaction rate\n• $2.3M average ROI\n\nJoin 50,000+ companies already seeing results.\n\n📈 View case studies →`;
+      }
+            
+      // Handle result actions
+      handleResultAction(action, index) {
+        const result = this.state.results[index];
+                
+        switch(action) {
+          case 'preview':
+            this.state.previewActive = true;
+            this.state.previewContent = result.text;
+            this.render();
+            break;
+                    
+          case 'copy':
+            navigator.clipboard.writeText(result.text);
+            this.showToast('✓ Copied to clipboard');
+            break;
+                    
+          case 'export':
+            this.showToast('📤 Export feature coming soon');
+            break;
+        }
+      }
+            
+      // Show toast notification
+      showToast(message) {
+        const toast = document.getElementById('toast');
+        if (toast) {
+          toast.textContent = message;
+          toast.classList.add('active');
+          setTimeout(() => {
+            toast.classList.remove('active');
+          }, 3000);
+        }
+      }
+            
+      // Clear input
+      clearInput() {
+        this.state.inputText = '';
+        this.state.voiceTranscript = '';
+        this.state.imageFile = null;
+        this.state.imagePreview = null;
+        this.render();
+        this.showToast('Input cleared');
+      }
+            
+      // Clear image
+      clearImage() {
+        this.state.imageFile = null;
+        this.state.imagePreview = null;
+        this.render();
+      }
+            
+      // Show URL modal
+      showUrlModal() {
+        const modal = document.getElementById('urlModal');
+        if (modal) {
+          modal.style.display = 'block';
+        }
+      }
+            
+      // Close URL modal
+      closeUrlModal() {
+        const modal = document.getElementById('urlModal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      }
+            
+      // Import from URL
+      importFromUrl() {
+        const input = document.getElementById('urlModalInput');
+        if (input && input.value) {
+          // Simulate importing content from URL
+          this.state.inputText = `Content imported from: ${input.value}\n\nThis is sample content that would be extracted from the webpage. In a production environment, this would fetch and parse the actual page content.`;
+          this.closeUrlModal();
+          this.render();
+          this.showToast('✓ Content imported from URL');
+        }
+      }
+            
+      // Paste from clipboard
+      async pasteFromClipboard() {
+        try {
+          const text = await navigator.clipboard.readText();
+          this.state.inputText = text;
+          this.render();
+          this.showToast('✓ Content pasted');
+        } catch (err) {
+          this.showToast('Unable to paste from clipboard');
+        }
+      }
+            
+      // Load example content
+      loadExample() {
+        this.state.inputText = "Transform your business with our cutting-edge platform. We deliver innovative solutions that drive real results. Join thousands of satisfied customers who trust our expertise to power their success. Experience the difference quality makes.";
+        this.render();
+        this.showToast('✓ Example loaded');
+      }
+            
+      // Detect facts from text
+      detectFacts(text) {
+        const facts = [];
+                
+        // Detect numbers, percentages, prices
+        const numberPattern = /\b\d+([.,]\d+)?%?\b|\$\d+([.,]\d+)?/g;
+        const matches = text.match(numberPattern);
+        if (matches) {
+          facts.push(...matches);
+        }
+                
+        // Detect product names, SKUs (simple heuristic)
+        const uppercaseWords = text.match(/\b[A-Z]{2,}\b/g);
+        if (uppercaseWords) {
+          facts.push(...uppercaseWords);
+        }
+                
+        return [...new Set(facts)]; // Remove duplicates
+      }
+            
+      // Extract brand voice from content
+      async extractBrandVoice() {
+        const textArea = document.getElementById('brandExtractText');
+        const content = textArea ? textArea.value : '';
+                
+        if (!content.trim()) {
+          this.showToast('Please paste or upload content to analyze');
+          return;
+        }
+                
+        this.state.settings.extracting = true;
+        this.state.settings.extractionConfidence = 0;
+        this.render();
+                
+        // Simulate AI extraction process
+        for (let i = 0; i <= 87; i += 10) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          this.state.settings.extractionConfidence = i;
+                    
+          // Update confidence bar without full re-render
+          const confidenceBar = document.querySelector('.confidence-fill');
+          if (confidenceBar) {
+            confidenceBar.style.width = i + '%';
+          }
+        }
+                
+        // Simulate extracted brand characteristics
+        await new Promise(resolve => setTimeout(resolve, 500));
+                
+        // Analyze content and extract brand voice
+        const analysis = this.analyzeContent(content);
+                
+        // Update settings with extracted data
+        this.state.settings.brandName = analysis.brandName;
+        this.state.settings.brandTagline = analysis.tagline;
+        this.state.settings.brandVoice = analysis.voice;
+        this.state.settings.brandTone = analysis.tones;
+        this.state.settings.brandPersona = analysis.persona;
+        this.state.settings.extractionConfidence = 87;
+        this.state.settings.extracting = false;
+                
+        this.render();
+        this.showToast('✨ Brand voice extracted successfully!');
+      }
+            
+      // Analyze content to extract brand characteristics
+      analyzeContent(content) {
+        // Simulate AI analysis - in production, this would call an actual AI API
+        const contentLower = content.toLowerCase();
+                
+        // Detect tone attributes based on keywords
+        const tones = [];
+        if (contentLower.includes('professional') || contentLower.includes('expert')) {
+          tones.push('Professional');
+        }
+        if (contentLower.includes('friendly') || contentLower.includes('warm')) {
+          tones.push('Friendly');
+        }
+        if (contentLower.includes('innovative') || contentLower.includes('cutting-edge')) {
+          tones.push('Innovative');
+        }
+        if (contentLower.includes('trust') || contentLower.includes('reliable')) {
+          tones.push('Trustworthy');
+        }
+        if (contentLower.includes('bold') || contentLower.includes('dynamic')) {
+          tones.push('Bold');
+        }
+        if (contentLower.includes('sophisticated') || contentLower.includes('premium')) {
+          tones.push('Sophisticated');
+        }
+                
+        // If no tones detected, add some defaults
+        if (tones.length === 0) {
+          tones.push('Professional', 'Trustworthy', 'Direct');
+        }
+                
+        // Extract or generate other brand elements
+        const sentences = content.split('.').filter(s => s.trim().length > 0);
+        const firstSentence = sentences[0] || 'Your brand';
+                
+        return {
+          brandName: this.extractBrandName(content) || 'Your Brand',
+          tagline: this.extractTagline(sentences) || 'Excellence in every detail',
+          voice: `Based on the analyzed content, your brand voice is ${tones.slice(0, 2).join(' and ').toLowerCase()} with a focus on ${this.detectFocus(content)}. The communication style emphasizes ${this.detectEmphasis(content)} while maintaining a ${this.detectFormality(content)} tone that resonates with your audience.`,
+          tones: tones,
+          persona: `Your target audience consists of ${this.detectAudience(content)} who value ${this.detectValues(content)}. They are looking for solutions that ${this.detectNeeds(content)}.`
+        };
+      }
+            
+      // Helper methods for content analysis
+      extractBrandName(content) {
+        // Look for capitalized proper nouns that might be brand names
+        const matches = content.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g);
+        if (matches && matches.length > 0) {
+          // Return the most frequently occurring one
+          const frequency = {};
+          matches.forEach(match => {
+            frequency[match] = (frequency[match] || 0) + 1;
+          });
+          return Object.keys(frequency).reduce((a, b) => frequency[a] > frequency[b] ? a : b);
+        }
+        return null;
+      }
+            
+      extractTagline(sentences) {
+        // Look for short, impactful sentences
+        const shortSentences = sentences.filter(s => s.length < 60 && s.length > 10);
+        if (shortSentences.length > 0) {
+          return shortSentences[0].trim();
+        }
+        return null;
+      }
+            
+      detectFocus(content) {
+        const contentLower = content.toLowerCase();
+        if (contentLower.includes('customer') || contentLower.includes('client')) {
+          return 'customer satisfaction and success';
+        } else if (contentLower.includes('innovation') || contentLower.includes('technology')) {
+          return 'innovation and technological advancement';
+        } else if (contentLower.includes('quality') || contentLower.includes('excellence')) {
+          return 'quality and excellence';
+        }
+        return 'delivering exceptional value';
+      }
+            
+      detectEmphasis(content) {
+        const contentLower = content.toLowerCase();
+        if (contentLower.includes('result') || contentLower.includes('outcome')) {
+          return 'tangible results and outcomes';
+        } else if (contentLower.includes('experience') || contentLower.includes('journey')) {
+          return 'customer experience and journey';
+        } else if (contentLower.includes('value') || contentLower.includes('benefit')) {
+          return 'clear value and benefits';
+        }
+        return 'clarity and impact';
+      }
+            
+      detectFormality(content) {
+        const contentLower = content.toLowerCase();
+        const informalWords = ['you', 'your', "you're", "we're", "let's"];
+        const formalWords = ['therefore', 'moreover', 'furthermore', 'consequently'];
+                
+        const informalCount = informalWords.filter(word => contentLower.includes(word)).length;
+        const formalCount = formalWords.filter(word => contentLower.includes(word)).length;
+                
+        if (formalCount > informalCount) {
+          return 'formal and professional';
+        } else if (informalCount > formalCount) {
+          return 'conversational and approachable';
+        }
+        return 'balanced and versatile';
+      }
+            
+      detectAudience(content) {
+        const contentLower = content.toLowerCase();
+        if (contentLower.includes('enterprise') || contentLower.includes('corporate')) {
+          return 'enterprise decision-makers and corporate leaders';
+        } else if (contentLower.includes('startup') || contentLower.includes('entrepreneur')) {
+          return 'startups and entrepreneurs';
+        } else if (contentLower.includes('consumer') || contentLower.includes('customer')) {
+          return 'informed consumers and customers';
+        }
+        return 'forward-thinking professionals';
+      }
+            
+      detectValues(content) {
+        const contentLower = content.toLowerCase();
+        const values = [];
+                
+        if (contentLower.includes('quality')) values.push('quality');
+        if (contentLower.includes('innovation')) values.push('innovation');
+        if (contentLower.includes('efficiency')) values.push('efficiency');
+        if (contentLower.includes('reliability')) values.push('reliability');
+        if (contentLower.includes('transparency')) values.push('transparency');
+                
+        return values.length > 0 ? values.join(', ') : 'quality and innovation';
+      }
+            
+      detectNeeds(content) {
+        const contentLower = content.toLowerCase();
+        if (contentLower.includes('save time') || contentLower.includes('efficient')) {
+          return 'save time and increase efficiency';
+        } else if (contentLower.includes('grow') || contentLower.includes('scale')) {
+          return 'grow and scale their business';
+        } else if (contentLower.includes('simple') || contentLower.includes('easy')) {
+          return 'are simple and easy to implement';
+        }
+        return 'deliver real results';
+      }
+            
+      // Handle brand file upload
+      handleBrandFileUpload(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          const textArea = document.getElementById('brandExtractText');
+          if (textArea) {
+            textArea.value = content;
+          }
+          this.showToast('📄 File uploaded successfully');
+        };
+                
+        // Read file as text
+        reader.readAsText(file);
+      }
+            
+      // Save brand settings
+      saveBrandSettings() {
+        // Settings are already updated via input listeners
+        // Just show confirmation
+        this.showToast('✅ Brand settings saved successfully!');
+                
+        // Optionally save to localStorage for persistence
+        localStorage.setItem('brandSettings', JSON.stringify({
+          brandName: this.state.settings.brandName,
+          brandTagline: this.state.settings.brandTagline,
+          brandVoice: this.state.settings.brandVoice,
+          brandTone: this.state.settings.brandTone,
+          brandPersona: this.state.settings.brandPersona
+        }));
+      }
+    }
+        
+    // Initialize app
+    const app = new BrandCopyApp();
+    window.app = app; // Make app globally accessible for onclick handlers
   </script>
 </body>
 </html>
