@@ -1,0 +1,19 @@
+{
+  "name": "BrandCopy AI Dev",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ritwickdey.LiveServer",         // simple static preview
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "echo 'Ready to develop!'",
+  "portsAttributes": {
+    "5500": { "label": "Live Server", "onAutoForward": "openPreview" }
+  }
+}
