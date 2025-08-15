@@ -1608,6 +1608,20 @@ You can also:
                 <span>Bold</span>
               </div>
             </div>
+            <div class="control-group">
+              <label class="control-label">Provider & Model</label>
+              <div style="display:flex; gap:12px; align-items:center; margin:12px 0; flex-wrap:wrap;">
+                <label style="font-size:12px; color:#666;">Provider</label>
+                <select id="providerSelect" style="padding:8px; border: 1px solid var(--neutral-200); border-radius: 8px;">
+                  <option value="openai">OpenAI</option>
+                  <option value="anthropic">anthropic (Claude)</option>
+                  <option value="gemini">gemini (Google)</option>
+                </select>
+
+                <label style="font-size:12px; color:#666;">Model</label>
+                <input id="modelInput" placeholder="gpt-4o-mini | claude-3.5-sonnet | gemini-1.5-pro" style="padding:8px; width:320px; border: 1px solid var(--neutral-200); border-radius: 8px;" />
+              </div>
+            </div>
           </div>
         `;
       }
@@ -2140,89 +2154,44 @@ You can also:
         reader.readAsDataURL(file);
       }
             
-      // Generate optimization
+      // Generate via serverless API
       async generate() {
-        if (!this.state.inputText) {
-          this.showToast('Please enter some text to optimize');
-          return;
-        }
-                
-        this.state.loading = true;
-        this.state.thinking = true;
-        this.state.thoughts = [];
-        this.render();
-                
-        // Simulate AI thinking
-        const thoughts = [
-          'Analyzing original tone and intent...',
-          'Identifying key facts and claims to preserve...',
-          'Applying ' + this.state.context + '-specific optimizations...',
-          'Generating multiple style variations...',
-          'Scoring variants for predicted performance...'
-        ];
-                
-        for (let i = 0; i < thoughts.length; i++) {
-          await new Promise(resolve => setTimeout(resolve, 400));
-          this.state.thoughts.push(thoughts[i]);
-          this.render();
-        }
-                
-        await new Promise(resolve => setTimeout(resolve, 500));
-                
-        // Generate results
-        const baseText = this.state.inputText || 'Transform your business with our innovative solution.';
-                
-        this.state.results = [
-          {
-            style: 'Conversion Optimized',
-            text: this.optimizeForConversion(baseText),
-            lift: 34,
-            score: 92,
-            readability: 'Grade 8'
-          },
-          {
-            style: 'Emotional Appeal',
-            text: this.optimizeForEmotion(baseText),
-            lift: 28,
-            score: 89,
-            readability: 'Grade 7'
-          },
-          {
-            style: 'Data Driven',
-            text: this.optimizeWithData(baseText),
-            lift: 31,
-            score: 94,
-            readability: 'Grade 9'
-          }
-        ];
-                
-        // Auto-save to library if enabled
-        if (this.state.settings.autoSave) {
-          this.state.results.forEach(result => {
-            this.state.savedCopies.push({
-              text: result.text,
-              context: this.state.context,
-              date: new Date().toLocaleDateString(),
-              style: result.style,
-              score: result.score
-            });
+        if (!this.state.inputText) { this.showToast('Please enter some text'); return; }
+        this.state.loading = true; this.state.thinking = true; this.state.thoughts = []; this.render();
+
+        const providerEl = document.getElementById('providerSelect');
+        const modelEl = document.getElementById('modelInput');
+        const provider = providerEl ? providerEl.value : 'openai';
+        const model = (modelEl && modelEl.value) ? modelEl.value : (provider === 'openai' ? 'gpt-4o-mini' : provider === 'anthropic' ? 'claude-3.5-sonnet' : 'gemini-1.5-pro');
+
+        try {
+          const res = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              provider, model,
+              prompt: this.state.inputText,
+              settings: { length: this.state.length, creativity: this.state.creativity, tone: this.state.tone, context: this.state.context }
+            })
           });
-                    
-          // Keep only last 10 saved copies
-          if (this.state.savedCopies.length > 10) {
-            this.state.savedCopies = this.state.savedCopies.slice(-10);
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'API error');
+
+          this.state.results = [{
+            style: `Output (${data.provider} · ${data.model})`,
+            text: data.text || '(empty)',
+            lift: 30, score: 90, readability: 'Grade 8'
+          }];
+          if (data.pricing && typeof data.pricing.estimatedCharge === 'number') {
+            this.showToast(`Estimated cost: $${data.pricing.estimatedCharge.toFixed(4)} (input+output)`);
+          } else {
+            this.showToast(`✨ ${provider} responded`);
           }
+        } catch (e) {
+          this.showToast(`Error: ${e.message}`);
+        } finally {
+          this.state.loading = false; this.state.thinking = false; this.render();
         }
-                
-        // Update analytics
-        this.state.analytics.totalGenerated += 3;
-        this.state.analytics.avgLift = Math.round((this.state.analytics.avgLift + 31) / 2);
-                
-        this.state.loading = false;
-        this.state.thinking = false;
-        this.render();
-                
-        this.showToast('✨ Generated 3 optimized variants!');
       }
             
       optimizeForConversion(text) {
