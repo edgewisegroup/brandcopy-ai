@@ -1,99 +1,62 @@
-// Simple server-side pricing controls.
-// Estimate cost and optionally block/surcharge expensive models.
-
-const DEFAULT_PLAN = process.env.PRICING_PLAN || 'free'; // free | pro | enterprise
-const BLOCK_ABOVE_PLAN = (process.env.BLOCK_ABOVE_PLAN || 'false').toLowerCase() === 'true';
-const SURCHARGE_PERCENT = Number(process.env.SURCHARGE_PERCENT || 0); // e.g., 25 means +25%
-
-// Per-1k token unit prices (USD). Update as needed.
-// These are illustrative defaults; override via env if desired.
-const UNIT_PRICES = {
+// Very simple price table (USD per 1k tokens). Adjust as needed.
+const PRICE_PER_KTOK = {
   openai: {
-    'gpt-4o-mini': { in: 0.0003, out: 0.0006 },
-    'gpt-4o': { in: 0.003, out: 0.006 },
+    'gpt-4o-mini': { in: 0.15, out: 0.60 },
+    'gpt-4o':      { in: 5.00,  out: 15.00 }
   },
   anthropic: {
-    'claude-3-5-sonnet': { in: 0.003, out: 0.015 },
-    'claude-3-haiku': { in: 0.00025, out: 0.00125 },
+    'claude-3.5-sonnet': { in: 3.00, out: 15.00 },
+    'claude-3-haiku':    { in: 0.25, out: 1.25 }
   },
   gemini: {
-    'gemini-1.5-pro': { in: 0.002, out: 0.002 },
-    'gemini-1.5-flash': { in: 0.0004, out: 0.0004 },
-  },
+    'gemini-1.5-pro':   { in: 3.50, out: 10.50 },
+    'gemini-1.5-flash': { in: 0.35, out: 1.05 }
+  }
 };
 
-// Mark some models as "expensive" to enforce plan gating/surcharge.
-const EXPENSIVE_MODELS = new Set([
-  'gpt-4o',
-  'claude-3-5-sonnet',
-  'gemini-1.5-pro',
-]);
-
-// Per-plan allowlist
-const PLAN_ALLOW = {
-  free: new Set(['gpt-4o-mini', 'claude-3-haiku', 'gemini-1.5-flash']),
-  pro: new Set(['gpt-4o-mini', 'gpt-4o', 'claude-3-haiku', 'claude-3-5-sonnet', 'gemini-1.5-flash', 'gemini-1.5-pro']),
-  enterprise: 'all',
+// Optional margin multipliers per plan (so you can "charge more" for expensive models)
+const PLAN_MULTIPLIER = {
+  free: 1.0,       // not actually charged; used for estimation/gating
+  pro:  1.25,      // 25% margin
+  enterprise: 1.5  // 50% margin
 };
 
-function isAllowed(plan, provider, model) {
-  const allow = PLAN_ALLOW[plan] ?? PLAN_ALLOW.free;
-  if (allow === 'all') return true;
-  return allow.has(model);
+// quick & dirty token estimate: ~4 chars/token
+function estimateTokensFromText(t) {
+  if (!t) return 0;
+  return Math.ceil(t.length / 4);
 }
 
-function isExpensive(model) {
-  return EXPENSIVE_MODELS.has(model);
+// choose nearest known model for pricing if exact not present
+function lookupPricing(provider, model) {
+  const table = PRICE_PER_KTOK[provider] || {};
+  if (table[model]) return table[model];
+  // fallbacks
+  if (provider === 'openai') return table['gpt-4o-mini'] || { in: 0.2, out: 0.6 };
+  if (provider === 'anthropic') return table['claude-3.5-sonnet'] || { in: 3, out: 15 };
+  if (provider === 'gemini') return table['gemini-1.5-pro'] || { in: 3.5, out: 10.5 };
+  return { in: 1, out: 3 };
 }
 
-function getUnitPrices(provider, model) {
-  return UNIT_PRICES?.[provider]?.[model] || { in: 0.001, out: 0.001 };
-}
+export function estimateAndPrice({ provider, model, prompt, outputText, plan = 'free' }) {
+  const pricing = lookupPricing(provider, model);
+  const inTok = estimateTokensFromText(prompt || '');
+  const outTok = estimateTokensFromText(outputText || '');
+  const inputCost  = (inTok / 1000) * pricing.in;
+  const outputCost = (outTok / 1000) * pricing.out;
 
-// Very rough token estimate: ~4 chars ≈ 1 token
-function estimateTokensFromText(text) {
-  if (!text) return 0;
-  const chars = String(text).length;
-  return Math.max(1, Math.ceil(chars / 4));
-}
-
-function mapLengthToMaxTokens(length) {
-  if (length === 'short') return 200;
-  if (length === 'long') return 1200;
-  return 600; // medium/default
-}
-
-function estimatePricing({ provider, model, prompt, settings }) {
-  const plan = DEFAULT_PLAN;
-  const unit = getUnitPrices(provider, model);
-  const estimatedTokensIn = estimateTokensFromText(prompt);
-  const estimatedTokensOut = mapLengthToMaxTokens(settings?.length);
-  const baseCost = (estimatedTokensIn * unit.in + estimatedTokensOut * unit.out) / 1000;
-
-  const expensive = isExpensive(model);
-  const surchargePct = expensive ? SURCHARGE_PERCENT : 0;
-  const surcharge = baseCost * (surchargePct / 100);
-  const estimatedCharge = baseCost + surcharge;
-
-  const blocked = BLOCK_ABOVE_PLAN && expensive && !isAllowed(plan, provider, model);
+  const baseCost = inputCost + outputCost;
+  const multiplier = PLAN_MULTIPLIER[plan] ?? 1.0;
+  const estimatedCharge = baseCost * multiplier;
 
   return {
-    plan,
-    provider,
     model,
-    unit,
-    estimatedTokensIn,
-    estimatedTokensOut,
-    baseCost,
-    surchargePercent: surchargePct,
-    surcharge,
-    estimatedCharge,
-    blocked,
+    provider,
+    inTokens: inTok,
+    outTokens: outTok,
+    pricingPerK: pricing,
+    plan,
+    multiplier,
+    estimatedCharge
   };
 }
-
-module.exports = {
-  estimatePricing,
-  isAllowed,
-  isExpensive,
-};

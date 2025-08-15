@@ -1,65 +1,51 @@
-import { normalize } from "../utils/normalize";
-import { callOpenAI } from "../providers/openai";
-import { callAnthropic } from "../providers/anthropic";
-import { callGemini } from "../providers/gemini";
-import { estimatePricing, isAllowed } from "../utils/pricing";
+import { callOpenAI } from './providers/openai.js';
+import { callAnthropic } from './providers/anthropic.js';
+import { callGemini } from './providers/gemini.js';
+import { normalize } from './utils/normalize.js';
+import { estimateAndPrice } from './utils/pricing.js';
 
-export const config = { runtime: "nodejs" };
-
-function corsHeaders(origin) {
-  return {
-    "Access-Control-Allow-Origin": origin || "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
-}
-
-export default async function handler(req) {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders(req.headers.get("origin")) });
-  }
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405, headers: corsHeaders(req.headers.get("origin")) });
-  }
-
-  let body;
-  try {
-    body = await req.json();
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
-  }
-
-  const { provider, model, prompt, settings } = body || {};
-  if (!provider || !model || !prompt) {
-    return new Response(JSON.stringify({ error: "provider, model, prompt required" }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
-  }
-
-  // Pricing gate/estimate
-  const pricing = estimatePricing({ provider, model, prompt, settings });
-  if (pricing.blocked) {
-    return new Response(JSON.stringify({ error: "Model not available on current plan", pricing }), { status: 402, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
-  }
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    let raw;
-    switch (provider) {
-      case "openai":
-        raw = await callOpenAI({ model, prompt, settings });
-        break;
-      case "anthropic":
-        raw = await callAnthropic({ model, prompt, settings });
-        break;
-      case "gemini":
-        raw = await callGemini({ model, prompt, settings });
-        break;
-      default:
-        return new Response(JSON.stringify({ error: "Unsupported provider" }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
+    const { provider, model, prompt, settings } = req.body || {};
+    if (!provider || !model || !prompt) {
+      return res.status(400).json({ error: 'provider, model, prompt required' });
     }
 
+    // Simple allowlist / plan gating
+    const plan = (req.headers['x-plan'] || 'free').toString(); // free | pro | enterprise
+    const { allowed, reason } = checkAllowed(provider, model, plan);
+    if (!allowed) return res.status(402).json({ error: `Blocked by plan policy: ${reason}` });
+
+    let raw, usageLike = {};
+    if (provider === 'openai') raw = await callOpenAI({ model, prompt, settings });
+    else if (provider === 'anthropic') raw = await callAnthropic({ model, prompt, settings });
+    else if (provider === 'gemini') raw = await callGemini({ model, prompt, settings });
+    else return res.status(400).json({ error: 'Unsupported provider' });
+
     const result = normalize(raw, provider);
-    return new Response(JSON.stringify({ ...result, model, pricing }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
+    // Best-effort usage mapping (some providers vary):
+    usageLike = result.usage || {};
+    const pricing = estimateAndPrice({ provider, model, prompt, outputText: result.text, plan });
+
+    return res.status(200).json({
+      provider, model, text: result.text, usage: usageLike, pricing
+    });
   } catch (e) {
-    const message = e?.message || "Unknown error";
-    return new Response(JSON.stringify({ error: message, pricing }), { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders(req.headers.get("origin")) } });
+    return res.status(500).json({ error: e?.message || 'Unknown error' });
   }
+}
+
+function checkAllowed(provider, model, plan) {
+  // Example: block very expensive models for free plan
+  const expensive = (
+    (provider === 'openai' && /gpt-4o|gpt-4-turbo/i.test(model)) ||
+    (provider === 'anthropic' && /opus|sonnet/i.test(model)) ||
+    (provider === 'gemini' && /1\.5-pro|flash-1\.5-pro/i.test(model))
+  );
+  if (plan === 'free' && expensive) {
+    return { allowed: false, reason: `Upgrade required for model ${model}` };
+  }
+  return { allowed: true };
 }
