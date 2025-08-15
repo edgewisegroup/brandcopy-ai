@@ -14,21 +14,27 @@ python3 -m http.server 5173
 # then visit http://localhost:5173
 ```
 
-## Optional: Real AI backend via Vercel
+## Optional: Real AI backend via Vercel (JS, no build)
 
-This repo includes a minimal serverless API under `api/` plus provider helpers in `providers/` and a `utils/normalize.ts`.
+This repo includes a minimal serverless API under `api/` (plain JavaScript). It proxies to OpenAI, Anthropic, or Google Gemini and normalizes the result. It also returns a simple price estimate and supports basic plan gating/surcharges.
 
-Files:
+Files (JS):
 
-- `api/generate.ts` — single endpoint that routes to a provider and returns `{ text, provider, usage }`.
-- `providers/openai.ts`, `providers/anthropic.ts`, `providers/gemini.ts` — plain fetch calls to providers.
-- `utils/normalize.ts` — normalizes responses to a common shape.
+- `api/generate.js` — single endpoint that routes to a provider and returns `{ text, provider, model, pricing }`.
+- `api/providers/openai.js`, `api/providers/anthropic.js`, `api/providers/gemini.js` — plain `fetch` calls to providers.
+- `api/utils/normalize.js` — normalizes provider responses to a common shape.
+- `api/utils/pricing.js` — plan allowlist + estimated cost + optional surcharge or block.
+- `vercel.json` — maps `api/*.js` to Node 20 runtime.
 
 Environment variables (Vercel → Project → Settings → Environment Variables):
 
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`
 - `GOOGLE_API_KEY`
+- Optional pricing controls:
+	- `PRICING_PLAN` = `free` | `pro` | `enterprise` (default: `free`)
+	- `BLOCK_ABOVE_PLAN` = `true` | `false` (default: `false`) — block expensive models not in plan
+	- `SURCHARGE_PERCENT` = integer like `25` (adds 25% surcharge)
 
 Deploy on Vercel and call from the frontend:
 
@@ -49,4 +55,5 @@ await fetch("/api/generate", {
 Notes:
 
 - CORS headers are included to allow calling the API from your static site.
+- Uses Node runtime for reliable `process.env` access.
 - You can swap to official SDKs later if preferred.
